@@ -23,13 +23,13 @@
 #define GPIO3 9 // 490 Hz PWM
 #define GPIO4 A5
 
-const byte SEG_DIGIT_LENGTH = 4;
-const byte SEG_DIGIT_POS[] = { 0xF1, 0xF2, 0xF4, 0xF8 }; // this table sets a "selector" for what digit is selected
-const byte SEG_DIGIT_TABLE[] = { 0xC0, 0xF9, 0xA4, 0xB0, 0x99, 0x92, 0x82, 0xF8, 0x80, 0x90 }; // Digit to segment mask map table
-const byte SEG_LETTER_TABLE[] = { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF}; // Char to segment mask map table
+const char SEG_DIGIT_LENGTH = 4;
+const char SEG_DIGIT_POS[] = { 0xF1, 0xF2, 0xF4, 0xF8 }; // this table sets a "selector" for what digit is selected
+const char SEG_DIGIT_TABLE[] = { 0xC0, 0xF9, 0xA4, 0xB0, 0x99, 0x92, 0x82, 0xF8, 0x80, 0x90 }; // Digit to segment mask map table
+const char SEG_LETTER_TABLE[] = { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF}; // Char to segment mask map table
 
 
-byte seg_buffer[] = { 0xFF, 0xFF, 0xFF, 0xFF }; // Stores values of segment display at each digit
+char seg_buffer[] = { 0xFF, 0xFF, 0xFF, 0xFF }; // Stores values of segment display at each digit
 unsigned long seg_buff = 0xFFFFFFFFuL; // Store segment display mask values at each digit in sequential bytes (big endian)
 
 void setup() {
@@ -73,7 +73,7 @@ void initShield() {
   clearSegBuffer();
 }
 
-void displayMask(byte mask, byte pos) {
+void displayMask(char mask, char pos) {
   if (pos < 0 || SEG_DIGIT_LENGTH <= pos) return;
   digitalWrite(SEG_LATCH, LOW);
   shiftOut(SEG_SDA, SEG_CLK, MSBFIRST, mask); // Display character mask
@@ -150,7 +150,7 @@ void setSegBufferErr() {
   setSegBufferStr(errStr, sizeof(errStr));
 }
 
-byte charToSegMask(char chr) {
+char charToSegMask(char chr) {
   if (chr == ' ') return 0xFF;
   if (48 <= chr || chr <= 57) {
     return SEG_DIGIT_TABLE[chr - 48]; // Subtract ascii offset
@@ -198,11 +198,11 @@ char* toneFrequencyToNote(int frequency) {
   return "?";
 }
 
-byte readButtonState() {
+char readButtonState() {
   return digitalRead(S3) << 2 | digitalRead(S2) << 1 | digitalRead(S1);
 }
 
-void handleButtonPress(byte mask) {
+void handleButtonPress(char mask) {
   if (mask & 1) { // S1 pressed
   }
   if (mask & 2) { // S2 pressed
@@ -212,7 +212,7 @@ void handleButtonPress(byte mask) {
   setActiveLeds(mask | 8);
 }
 
-void setActiveLeds(byte mask) {
+void setActiveLeds(char mask) {
   digitalWrite(D1, mask & 1);
   digitalWrite(D2, mask & 2);
   digitalWrite(D3, mask & 4);
