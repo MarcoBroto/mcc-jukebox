@@ -1,6 +1,5 @@
-
-#ifndef seg_display.h
-#define seg_display.h
+#ifndef SEG_DISPLAY_H
+#define SEG_DISPLAY_H
 
 #define SEG_LATCH 4
 #define SEG_CLK 7
